@@ -1,0 +1,6 @@
+@TicketTitan_HostAddress = http://localhost:5255
+
+GET {{TicketTitan_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
