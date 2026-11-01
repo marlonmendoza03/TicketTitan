@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using TicketTitan.Data;
 using TicketTitan.Hubs;
 using TicketTitan.Services;
+using TicketTitan.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateTicketDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateTicketStatusDtoValidator>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

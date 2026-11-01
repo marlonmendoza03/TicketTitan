@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using TicketTitan.Data;
 using TicketTitan.DTO;
 using TicketTitan.Hubs;
 using TicketTitan.Models;
+using TicketTitan.Validators;
 
 namespace TicketTitan.Services
 {
@@ -12,7 +14,9 @@ namespace TicketTitan.Services
         private readonly ApplicationDbContext _context;
         private readonly IHubContext<TicketHub> _hubContext;
 
-        public TicketService(ApplicationDbContext context, IHubContext<TicketHub> hubContext)
+        public TicketService(
+            ApplicationDbContext context, 
+            IHubContext<TicketHub> hubContext)
         {
             _context = context;
             _hubContext = hubContext;
