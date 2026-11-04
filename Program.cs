@@ -5,12 +5,11 @@ using TicketTitan.Services;
 using TicketTitan.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using TicketTitan.Models;
 using Microsoft.AspNetCore.Identity;
 using TicketTitan.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
