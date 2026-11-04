@@ -76,5 +76,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<TicketHub>("/hubs/tickets");
+app.MapGet("/", () => Results.Ok(new { status = "TicketTitan API running" }));
 
 app.Run();

@@ -23,6 +23,7 @@ namespace TicketTitan.Controllers
            _logger = logger;
         }
 
+        [Route("api/[controller]/google-login")]
         [HttpPost]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequestDto request)
         {
