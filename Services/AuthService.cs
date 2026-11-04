@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using TicketTitan.Common;
+using TicketTitan.Data;
 using TicketTitan.DTO;
 using TicketTitan.Interfaces;
 using TicketTitan.Models;

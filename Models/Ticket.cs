@@ -1,4 +1,6 @@
-﻿namespace TicketTitan.Models
+﻿using TicketTitan.Data;
+
+namespace TicketTitan.Models
 {
     public class Ticket
     {
@@ -9,5 +11,7 @@
         public int Priority { get; set; }
         public string Status { get; set; } = "Open";
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string? CreatedByUserId { get; set; }
+        public ApplicationUser? CreatedByUser { get; set; }
     }
 }

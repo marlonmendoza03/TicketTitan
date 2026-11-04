@@ -1,4 +1,5 @@
 ﻿using Google.Apis.Auth;
+using TicketTitan.Data;
 using TicketTitan.Models;
 
 namespace TicketTitan.DTO
