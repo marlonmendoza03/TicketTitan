@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using TicketTitan.Common;
 using TicketTitan.Data;
 using TicketTitan.DTO;
 using TicketTitan.Hubs;
@@ -31,12 +32,13 @@ namespace TicketTitan.Services
                 t.Category,
                 t.Status,
                 t.Priority,
-                t.CreatedAt
+                t.CreatedAt,
+                t.CreatedByUserId
             ))
             .ToListAsync();
         }
 
-        public async Task<TicketResponseDto> GetTicketByIdAsync(int id)
+        public async Task<TicketResponseDto?> GetTicketByIdAsync(int id)
         {
             var ticket = await _context.Tickets.FindAsync(id);
             if(ticket == null) return null;
@@ -48,11 +50,12 @@ namespace TicketTitan.Services
                 ticket.Category, 
                 ticket.Status, 
                 ticket.Priority, 
-                ticket.CreatedAt
+                ticket.CreatedAt,
+                ticket.CreatedByUserId
             );
         }
 
-        public async Task<TicketResponseDto> CreateTicketAsync(CreateTicketDto dto)
+        public async Task<ServiceResult<TicketResponseDto>> CreateTicketAsync(CreateTicketDto dto, string userId)
         {
             var ticket = new Ticket{
                 Title = dto.Title,
@@ -60,7 +63,8 @@ namespace TicketTitan.Services
                 Category = dto.Category,
                 Priority = dto.Priority,
                 Status = "Open",
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                CreatedByUserId = userId
             };
 
             _context.Tickets.Add(ticket);
@@ -73,7 +77,8 @@ namespace TicketTitan.Services
                 ticket.Category,
                 ticket.Status,
                 ticket.Priority,
-                ticket.CreatedAt
+                ticket.CreatedAt,
+                ticket.CreatedByUserId
             );
 
             await _hubContext.Clients.All.SendAsync("TicketCreated", response);
@@ -84,15 +89,21 @@ namespace TicketTitan.Services
                 await _hubContext.Clients.All.SendAsync("ReceiveHighPriorityNotification", alert);
             }
 
-            return response;
+            return ServiceResult<TicketResponseDto>.Success(response);
         }
 
-        public async Task<bool> UpdateStatusAsync(int id, string newStatus) { 
+        public async Task<ServiceResult<bool>> UpdateStatusAsync(int id, string newStatus, string UserId) { 
             var ticket = await _context.Tickets.FindAsync(id);
-            if (ticket == null) return false;
+            if (ticket == null) return ServiceResult<bool>.Failure("Ticket not found");
+
+            if (ticket.CreatedByUserId != UserId)
+            {
+                return ServiceResult<bool>.Failure("User is not the owner of this ticket");
+            }
 
             string oldStatus = ticket.Status;
             ticket.Status = newStatus;
+            ticket.UpdatedByUserId = UserId;
             await _context.SaveChangesAsync();
 
             await _hubContext.Clients.All.SendAsync("TicketStatusUpdated", new { TicketId = ticket.Id, NewStatus = newStatus });
@@ -103,7 +114,7 @@ namespace TicketTitan.Services
                 await _hubContext.Clients.All.SendAsync("ReceiveTicketResolvedNotification", notification);
             }
 
-            return true;
+            return ServiceResult<bool>.Success(true);
         }
 
     }

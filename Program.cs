@@ -35,6 +35,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSignalR();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var jwtSecret = builder.Configuration["JwtSettings:Secret"]
+    ?? throw new InvalidOperationException("JwtSettings:Secret is not configured.");
 
 builder.Services.AddAuthentication(options =>
     {
@@ -51,7 +53,7 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
         };
     });
 
@@ -74,5 +76,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<TicketHub>("/hubs/tickets");
+app.MapGet("/", () => Results.Ok(new { status = "TicketTitan API running" }));
 
 app.Run();

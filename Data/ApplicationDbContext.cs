@@ -35,6 +35,12 @@ namespace TicketTitan.Data
                 .WithMany()
                 .HasForeignKey(t => t.CreatedByUserId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(t => t.UpdatedByUser)
+                .WithMany()
+                .HasForeignKey(t => t.UpdatedByUserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             });
         }
     }

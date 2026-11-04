@@ -13,5 +13,7 @@ namespace TicketTitan.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string? CreatedByUserId { get; set; }
         public ApplicationUser? CreatedByUser { get; set; }
+        public string? UpdatedByUserId { get; set; }
+        public ApplicationUser? UpdatedByUser { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace TicketTitan.DTO
+﻿using TicketTitan.Data;
+
+namespace TicketTitan.DTO
 {
     public record CreateTicketDto(
         string Title, 
@@ -16,7 +18,8 @@
         string Category,
         string Status,
         int Priority,
-        DateTime CreatedAt
+        DateTime CreatedAt,
+        string? CreatedByUserId
     );
 
     public record TicketNotificationDto(
