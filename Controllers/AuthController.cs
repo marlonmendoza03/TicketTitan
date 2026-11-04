@@ -1,5 +1,7 @@
 ﻿using Google.Apis.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,14 +15,56 @@ namespace TicketTitan.Controllers
     {
         private readonly IAuthService _authService;
         private readonly ILogger<AuthController> _logger;
+        private readonly IAntiforgery _antiforgery;
 
         public AuthController(
             IAuthService authService,
-            ILogger<AuthController> logger
+            ILogger<AuthController> logger,
+            IAntiforgery antiforgery
             )
         {
            _authService = authService;
            _logger = logger;
+           _antiforgery = antiforgery;
+        }
+
+        [Route("api/[controller]/csrf-token")]
+        [HttpGet]
+        public IActionResult GetCsrfToken()
+        {
+            var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
+            return Ok(new { Token = tokens.RequestToken });
+        }
+
+        [Authorize]
+        [Route("api/[controller]/session")]
+        [HttpGet]
+        public IActionResult GetSession()
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value
+                ?? User.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new { Email = email });
+        }
+
+        [Route("api/[controller]/logout")]
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("TicketTitan.Auth", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Path = "/"
+            });
+
+            return NoContent();
         }
 
         [Route("api/[controller]/google-login")]
@@ -39,7 +83,17 @@ namespace TicketTitan.Controllers
                 var (user, roles, payload) = result.Value;
 
                 var appToken = GenerateApplicationJwt(payload.Email, user.Id, roles);
-                return Ok(new { Token = appToken, Email = payload.Email });
+                var tokenExpiry = new JwtSecurityTokenHandler().ReadJwtToken(appToken).ValidTo;
+                Response.Cookies.Append("TicketTitan.Auth", appToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Path = "/",
+                    Expires = new DateTimeOffset(tokenExpiry, TimeSpan.Zero)
+                });
+
+                return Ok(new { Email = payload.Email });
             }
             catch(InvalidJwtException ex)
             {
