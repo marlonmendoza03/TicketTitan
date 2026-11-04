@@ -53,7 +53,7 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins(
                 "http://localhost:5173",
-                "https://ticket-titan-ruby.vercel.app/")
+                "https://ticket-titan-ruby.vercel.app")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
