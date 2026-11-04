@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TicketTitan.DTO;
-using TicketTitan.Services;
+using TicketTitan.Interfaces;
 
 namespace TicketTitan.Controllers
 {

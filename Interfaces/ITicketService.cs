@@ -1,6 +1,6 @@
 ﻿using TicketTitan.DTO;
 
-namespace TicketTitan.Services
+namespace TicketTitan.Interfaces
 {
     public interface ITicketService
     {

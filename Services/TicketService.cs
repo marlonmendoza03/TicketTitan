@@ -1,11 +1,10 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using TicketTitan.Data;
 using TicketTitan.DTO;
 using TicketTitan.Hubs;
+using TicketTitan.Interfaces;
 using TicketTitan.Models;
-using TicketTitan.Validators;
 
 namespace TicketTitan.Services
 {
