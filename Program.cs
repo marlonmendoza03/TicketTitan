@@ -126,8 +126,15 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
 app.UseCors("UiClient");
+
+app.Use(async (context,next) =>
+{
+    context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+    await next();
+});
+
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
