@@ -36,7 +36,7 @@ namespace TicketTitan.Controllers
             return Ok(new { Token = tokens.RequestToken });
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [Route("api/[controller]/session")]
         [HttpGet]
         public IActionResult GetSession()
@@ -46,7 +46,7 @@ namespace TicketTitan.Controllers
 
             if (string.IsNullOrWhiteSpace(email))
             {
-                return Unauthorized();
+                return NoContent();
             }
 
             return Ok(new { Email = email });
