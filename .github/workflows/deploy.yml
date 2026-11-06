@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: marlonmendoza03/tickettitan
   RESOURCE_GROUP: TicketTitan_group
   CONTAINER_APP_NAME: tickettitancontainer
   CONTAINER_APP_ENV: managedEnvironment-TicketTitangrou-a242
