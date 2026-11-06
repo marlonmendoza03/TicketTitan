@@ -94,4 +94,5 @@ jobs:
                 ASPNETCORE_URLS=http://+:8080 \
                 JwtSettings__Issuer=TicketTitan \
                 JwtSettings__Audience=TicketTitanClient \
-                VaultUri=https://<your-keyvault-name>.vault.azure.net/
+                JwtSettings__Secret="${{ secrets.JWT_SECRET }}"
+                VaultUri=https://tickettitanvault.vault.azure.net/
