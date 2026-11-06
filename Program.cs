@@ -1,27 +1,28 @@
-using Microsoft.EntityFrameworkCore;
-using TicketTitan.Data;
-using TicketTitan.Hubs;
-using TicketTitan.Services;
-using TicketTitan.Validators;
+using Azure.Identity;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
-using TicketTitan.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Azure.Identity;
-using TicketTitan.Filters;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using TicketTitan.Data;
+using TicketTitan.Filters;
+using TicketTitan.Hubs;
+using TicketTitan.Interfaces;
+using TicketTitan.Services;
+using TicketTitan.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var keyVaultEndpoint = Environment.GetEnvironmentVariable("VaultUri");
-if (!string.IsNullOrWhiteSpace(keyVaultEndpoint)){
+if (!string.IsNullOrWhiteSpace(keyVaultEndpoint))
+{
     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential());
 }
-
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -29,9 +30,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
-    options.ForwardedHeaders = 
-        ForwardedHeaders.XForwardedFor | 
-        ForwardedHeaders.XForwardedProto | 
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor |
+        ForwardedHeaders.XForwardedProto |
         ForwardedHeaders.XForwardedHost;
 
     options.KnownNetworks.Clear();
@@ -54,38 +55,43 @@ builder.Services.AddRequestTimeouts(options =>
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateTicketDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateTicketStatusDtoValidator>();
+
 builder.Services.AddControllers(options =>
 {
     options.Filters.AddService<CookieCsrfAuthorizationFilter>();
 });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddAntiforgery(options =>
 {
     options.HeaderName = "X-CSRF-TOKEN";
     options.Cookie.Name = "TicketTitan.AntiForgery";
     options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        ? CookieSecurePolicy.SameAsRequest
+        : CookieSecurePolicy.Always;
+    options.Cookie.SameSite = builder.Environment.IsDevelopment()
+        ? SameSiteMode.Lax
+        : SameSiteMode.None;
     options.Cookie.Path = "/";
 });
+
 builder.Services.AddScoped<CookieCsrfAuthorizationFilter>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("UiClient", policy =>
     {
         policy
-            .WithOrigins(
-                "http://localhost:5173",
-                "https://ticket-titan-ruby.vercel.app")
+            .WithOrigins("http://localhost:5173", "https://ticket-titan-ruby.vercel.app")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
     });
 });
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
+builder.Services.AddOpenApi();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSignalR();
@@ -95,37 +101,40 @@ var jwtSecret = builder.Configuration["JwtSettings:Secret"]
     ?? throw new InvalidOperationException("JwtSettings:Secret is not configured.");
 
 builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(jwtOptions =>
+{
+    jwtOptions.TokenValidationParameters = new TokenValidationParameters
     {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(jwtOptions =>
-    {
-        jwtOptions.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
-        };
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
+    };
 
-        jwtOptions.Events = new JwtBearerEvents
+    jwtOptions.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
         {
-            OnMessageReceived = context =>
+            if (!context.Request.Headers.ContainsKey("Authorization") &&
+                context.Request.Cookies.TryGetValue("TicketTitan.Auth", out var token))
             {
-                if (!context.Request.Headers.ContainsKey("Authorization") &&
-                    context.Request.Cookies.TryGetValue("TicketTitan.Auth", out var token))
-                {
-                    context.Token = token;
-                }
-
-                return Task.CompletedTask;
+                context.Token = token;
             }
-        };
-    });
+
+            return Task.CompletedTask;
+        }
+    };
+});
+
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "dataprotection-keys")));
 
 var app = builder.Build();
 
@@ -133,7 +142,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI( c =>
+    app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "TicketTitan API V1");
         c.RoutePrefix = "swagger";
@@ -143,13 +152,17 @@ if (app.Environment.IsDevelopment())
 app.UseForwardedHeaders();
 app.UseCors("UiClient");
 
-app.Use(async (context,next) =>
+app.Use(async (context, next) =>
 {
     context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
     await next();
 });
 
-app.UseHttpsRedirection();
+if (!builder.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
 
