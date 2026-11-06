@@ -22,6 +22,16 @@ jobs:
       packages: write
 
     steps:
+      - name: Update app settings
+        uses: azure/CLI@v2
+        with:
+          inlineScript: |
+            az containerapp update \
+              --name ${{ env.CONTAINER_APP_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP }} \
+              --set-env-vars \
+                ConnectionStrings__DefaultConnection="${{ secrets.SUPABASE_CONNECTION_STRING }}"
+                
       - name: Checkout repository
         uses: actions/checkout@v4
 
