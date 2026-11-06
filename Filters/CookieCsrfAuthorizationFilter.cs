@@ -21,7 +21,8 @@ public sealed class CookieCsrfAuthorizationFilter : IAsyncAuthorizationFilter
             HttpMethods.IsHead(request.Method) ||
             HttpMethods.IsOptions(request.Method) ||
             HttpMethods.IsTrace(request.Method) ||
-            request.Headers.ContainsKey("Authorization"))
+            request.Headers.ContainsKey("Authorization") ||
+            request.Path.StartsWithSegments("/api/auth/google-login"))
         {
             return;
         }
