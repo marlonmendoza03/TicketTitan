@@ -25,7 +25,7 @@ if (!string.IsNullOrWhiteSpace(keyVaultEndpoint)){
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
