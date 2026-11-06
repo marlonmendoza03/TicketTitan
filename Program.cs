@@ -17,8 +17,11 @@ using Microsoft.AspNetCore.Http.Timeouts;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri")!);
-builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+var keyVaultEndpoint = Environment.GetEnvironmentVariable("VaultUri");
+if (!string.IsNullOrWhiteSpace(keyVaultEndpoint)){
+    builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential());
+}
+
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
