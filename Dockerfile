@@ -13,6 +13,9 @@ RUN dotnet publish "./TicketTitan.csproj" -c Release -o /app/publish /p:UseAppHo
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libgssapi-krb5-2 && \
+    rm -rf /var/lib/apt/lists/*
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 COPY --from=build /app/publish .

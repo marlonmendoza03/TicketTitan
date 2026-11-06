@@ -113,6 +113,13 @@ namespace TicketTitan.Controllers
         private string GenerateApplicationJwt(string email, string userId, IEnumerable<string> roles)
         {
             var jwtSettings = _authService.GetJwtSettings();
+
+            var expiryText = jwtSettings["ExpiryInMinutes"];
+            if (string.IsNullOrWhiteSpace(expiryText) || !double.TryParse(expiryText, out var expiryMinutes) || expiryMinutes <= 0)
+            {
+                throw new InvalidOperationException("JwtSettings:ExpiryInMinutes is missing or invalid.");
+            }
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -129,7 +136,7 @@ namespace TicketTitan.Controllers
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(double.Parse(jwtSettings["ExpiryInMinutes"]!)),
+                expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
                 signingCredentials: creds
             );
 
