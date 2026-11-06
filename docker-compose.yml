@@ -1,0 +1,20 @@
+﻿services:
+  tickettitan-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Data Source=/data/app.db
+      JwtSettings__Secret: ${JwtSettings__Secret}
+      JwtSettings__Issuer: ${JwtSettings__Issuer}
+      JwtSettings__Audience: ${JwtSettings__Audience}
+      VaultUri: ${VaultUri}
+    volumes:
+      - tickettitan-data:/data
+
+volumes:
+  tickettitan-data:
