@@ -31,7 +31,6 @@ README.md
 bin/
 obj/
 .vs/
-.git/
 *.db
 *.db-shm
 *.db-wal
