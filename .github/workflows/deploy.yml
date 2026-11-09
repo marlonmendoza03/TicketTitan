@@ -60,7 +60,7 @@ jobs:
         uses: azure/CLI@v2
         with:
           inlineScript: |
-            az containerapp create \
+            az containerapp update \
               --name ${{ env.CONTAINER_APP_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP }} \
               --environment ${{ env.CONTAINER_APP_ENV }} \
