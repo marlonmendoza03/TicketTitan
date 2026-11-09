@@ -64,4 +64,4 @@ jobs:
               --name ${{ env.CONTAINER_APP_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP }} \
               --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
-              --set-env-vars "JWT_SECRET=${{ secrets.JWT_SECRET }}" "SUPABASE_CONNECTION_STRING=${{ secrets.SUPABASE_CONNECTION_STRING }}"
+              --set-env-vars "JWT_SECRET=${{ secrets.JWT_SECRET }}" "SUPABASE_CONNECTION_STRING=${{ secrets.SUPABASE_CONNECTION_STRING }}" "Gemini__ApiKey=${{ secrets.GEMINI_API_KEY }}"
