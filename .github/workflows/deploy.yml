@@ -56,12 +56,10 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Create or update Azure Container App
-        uses: azure/CLI@v2
+      - name: Deploy to Azure Container Apps
+        uses: azure/container-apps-deploy-action@v1
         with:
-          inlineScript: |
-            az containerapp update \
-              --name ${{ env.CONTAINER_APP_NAME }} \
-              --resource-group ${{ env.RESOURCE_GROUP }} \
-              --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
-              --set-env-vars "JWT_SECRET=${{ secrets.JWT_SECRET }}" "SUPABASE_CONNECTION_STRING=${{ secrets.SUPABASE_CONNECTION_STRING }}" "Gemini__ApiKey=${{ secrets.GEMINI_API_KEY }}"
+          acrName: ${{ env.REGISTRY }}
+          containerAppName: ${{ env.CONTAINER_APP_NAME }}
+          resourceGroup: ${{ env.RESOURCE_GROUP }}
+          imageToDeploy: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
