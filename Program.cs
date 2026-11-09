@@ -13,6 +13,7 @@ using TicketTitan.Data;
 using TicketTitan.Filters;
 using TicketTitan.Hubs;
 using TicketTitan.Interfaces;
+using TicketTitan.Options;
 using TicketTitan.Services;
 using TicketTitan.Validators;
 
@@ -95,6 +96,22 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSignalR();
+
+builder.Services.AddOptions<GeminiOptions>()
+    .Bind(builder.Configuration.GetSection(GeminiOptions.SectionName))
+    .PostConfigure(options =>
+    {
+        if (string.IsNullOrWhiteSpace(options.ApiKey))
+        {
+            options.ApiKey = builder.Configuration["GEMINI_API_KEY"] ?? string.Empty;
+        }
+    });
+builder.Services.AddHttpClient<IGeminiService, GeminiService>((services, client) =>
+{
+    var options = services.GetRequiredService<Microsoft.Extensions.Options.IOptions<GeminiOptions>>().Value;
+    client.BaseAddress = new Uri(options.BaseUrl);
+    client.Timeout = TimeSpan.FromSeconds(25);
+});
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var jwtSecret = builder.Configuration["JwtSettings:Secret"]
