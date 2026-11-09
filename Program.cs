@@ -43,6 +43,12 @@ builder.Services.AddIdentityCore<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddHttpClient<IGeminiChatService, GeminiChatService>(client =>
+{
+    client.BaseAddress = new Uri("https://generativelanguage.googleapis.com");
+    client.Timeout = TimeSpan.FromMinutes(3);
+});
+
 builder.Services.AddRequestTimeouts(options =>
 {
     options.DefaultPolicy = new RequestTimeoutPolicy
@@ -50,6 +56,8 @@ builder.Services.AddRequestTimeouts(options =>
         Timeout = TimeSpan.FromSeconds(30),
         TimeoutStatusCode = StatusCodes.Status504GatewayTimeout
     };
+
+    options.AddPolicy("GeminiPolicy", TimeSpan.FromMinutes(3));
 });
 
 builder.Services.AddFluentValidationAutoValidation();

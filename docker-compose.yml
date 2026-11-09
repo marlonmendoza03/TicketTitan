@@ -14,6 +14,7 @@
       JwtSettings__Audience: ${JwtSettings__Audience}
       JwtSettings__ExpiryInMinutes: ${JwtSettings__ExpiryInMinutes}
       Authentication__Google__ClientId: ${Authentication__Google__ClientId}
+      Gemini__ApiKey: ${Gemini__ApiKey}
       VaultUri: ${VaultUri}
     volumes:
       - tickettitan-data:/data
