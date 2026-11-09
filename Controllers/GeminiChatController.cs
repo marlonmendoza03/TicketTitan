@@ -4,6 +4,8 @@ using TicketTitan.Interfaces;
 
 namespace TicketTitan.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class GeminiChatController : ControllerBase
     {
         private readonly IGeminiChatService _geminiChatService;
@@ -12,7 +14,7 @@ namespace TicketTitan.Controllers
             _geminiChatService = geminiChatService;
         }
 
-        [HttpPost("api/chat")]
+        [HttpPost("chat")]
         public async Task<ActionResult<GeminiChatResponseDto>> Chat([FromBody] GeminiChatRequestDto request, CancellationToken cancellationToken)
         {
             if (request.Messages == null || request.Messages.Count == 0)
