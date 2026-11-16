@@ -12,10 +12,42 @@ namespace TicketTitan.Data
         }
 
         public DbSet<Ticket> Tickets => Set<Ticket>();
+        public DbSet<StoryChatSession> StoryChatSessions => Set<StoryChatSession>();
+        public DbSet<StoryChatMessage> StoryChatMessages => Set<StoryChatMessage>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<StoryChatSession>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.Title)
+                .HasMaxLength(200)
+                .IsRequired();
+
+                entity.Property(x => x.UserId)
+                .IsRequired();
+            });
+
+            modelBuilder.Entity<StoryChatMessage>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.Role)
+                .HasConversion<string>()
+                .HasMaxLength(10)
+                .IsRequired();
+
+                entity.Property(x => x.Content)
+                .IsRequired();
+
+                entity.HasOne(x => x.Session)
+                .WithMany(x => x.Messages)
+                .HasForeignKey(x => x.SessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
 
             modelBuilder.Entity<Ticket>(entity =>
             {
