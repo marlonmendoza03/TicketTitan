@@ -36,7 +36,7 @@ namespace TicketTitan.Data
                 entity.HasKey(x => x.Id);
 
                 entity.Property(x => x.Role)
-                .HasConversion<string>()
+                .HasConversion<int>()
                 .HasMaxLength(10)
                 .IsRequired();
 

@@ -32,6 +32,17 @@ namespace TicketTitan.Controllers
             return Ok(session.Value);
         }
 
+        [HttpGet("sessions")]
+        public async Task<ActionResult<List<StoryChatSessionDto>>> GetSessions()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized();
+
+            var sessions = await _storyChatService.GetSessionsAsync(userId);
+            return Ok(sessions);
+        }
+
         [HttpGet("sessions/{sessionId}")]
         public async Task<ActionResult<StoryChatSessionDto>> GetSession(Guid sessionId)
         {
@@ -66,6 +77,24 @@ namespace TicketTitan.Controllers
 
             return Ok(session.Value);
         }
+
+        [HttpPost("sessions/message")]
+        public async Task<ActionResult<StoryChatSessionDto>> SendInitialMessage([FromBody] StoryChatMessageDto request)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized();
+
+            if (string.IsNullOrWhiteSpace(request.Content))
+                return BadRequest("Message content is required.");
+
+            var initialMessage = await _storyChatService.StartChatAsync(userId, request.Content, request.StorySetup, "gemini-3.5-flash-lite");
+
+            if (!initialMessage.IsSuccess)
+                return BadRequest(initialMessage.ErrorMessage);
+
+            return Ok(initialMessage.Value);
+        }   
 
     }
 }
