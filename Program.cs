@@ -67,7 +67,11 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateTicketStatusDtoValida
 builder.Services.AddControllers(options =>
 {
     options.Filters.AddService<CookieCsrfAuthorizationFilter>();
-});
+
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+}); ;
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

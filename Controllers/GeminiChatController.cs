@@ -6,32 +6,35 @@ namespace TicketTitan.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class GeminiChatController : ControllerBase
     {
-        private readonly IGeminiChatService _geminiChatService;
-        public GeminiChatController(IGeminiChatService geminiChatService)
-        {
-            _geminiChatService = geminiChatService;
-        }
+        //Decommissioning this controller
 
-        [HttpPost("chat")]
-        public async Task<ActionResult<GeminiChatResponseDto>> Chat([FromBody] GeminiChatRequestDto request, CancellationToken cancellationToken)
-        {
-            if (request.Messages == null || request.Messages.Count == 0)
-            {
-                return BadRequest("At least one message is required.");
-            }
+        //private readonly IGeminiChatService _geminiChatService;
+        //public GeminiChatController(IGeminiChatService geminiChatService)
+        //{
+        //    _geminiChatService = geminiChatService;
+        //}
 
-            var prompt = request.Messages.Last().Content;
+        //[HttpPost("chat")]
+        //public async Task<ActionResult<GeminiChatResponseDto>> Chat([FromBody] GeminiChatRequestDto request, CancellationToken cancellationToken)
+        //{
+        //    if (request.Messages == null || request.Messages.Count == 0)
+        //    {
+        //        return BadRequest("At least one message is required.");
+        //    }
 
-            var reply = await _geminiChatService.SendChatAsync(request.Messages.Select(m => (m.Role, m.Content)).ToList(), request.Model, cancellationToken);
+        //    var prompt = request.Messages.Last().Content;
 
-            if (!reply.IsSuccess)
-            {
-                return BadRequest(reply.ErrorMessage);
-            }
+        //    var reply = await _geminiChatService.SendChatAsync(request.Messages.Select(m => (m.Role, m.Content)).ToList(), request.Model, request.StorySetup, cancellationToken);
 
-            return Ok(reply.Value);
-        }
+        //    if (!reply.IsSuccess)
+        //    {
+        //        return BadRequest(reply.ErrorMessage);
+        //    }
+
+        //    return Ok(reply.Value);
+        //}
     }
 }

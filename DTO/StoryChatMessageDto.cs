@@ -6,5 +6,6 @@ namespace TicketTitan.DTO
     {
         public RoleType? Role { get; set; } = null;
         public string Content { get; set; } = string.Empty;
+        public StorySetup? StorySetup { get; set; }
     }
 }

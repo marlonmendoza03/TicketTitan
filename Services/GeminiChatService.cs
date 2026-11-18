@@ -16,12 +16,11 @@ namespace TicketTitan.Services
             _configuration = configuration;
         }
 
-        public async Task<ServiceResult<GeminiChatResponseDto>> SendChatAsync(string prompt, string model, CancellationToken cancellationToken)
+        public async Task<ServiceResult<GeminiChatResponseDto>> SendChatAsync(string prompt, string userId, string model, CancellationToken cancellationToken)
         {
-            var result = await SendChatAsync(new[]
-            {
+            var result = await SendChatAsync(new[]{
                 ("user", prompt)
-            },model, cancellationToken);
+            }, model, cancellationToken);
 
             if (!result.IsSuccess)
             {
@@ -34,7 +33,7 @@ namespace TicketTitan.Services
         public async Task<ServiceResult<GeminiChatResponseDto>> SendChatAsync(IReadOnlyList<(string Role, string Content)> messages, string model, CancellationToken cancellationToken)
         {
             var apiKey = _configuration["Gemini:ApiKey"] ?? throw new InvalidOperationException("Gemini API key is not configured");
-
+            
             var requestBody = new
             {
                 contents = messages.Select(m => new
@@ -42,7 +41,7 @@ namespace TicketTitan.Services
                     role = m.Role == "assistant" ? "model" : "user",
                     parts = new[]
                     {
-                        new { text = m.Content }
+                        new { text = m.Content}
                     }
                 }).ToArray()
             };
