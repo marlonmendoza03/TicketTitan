@@ -1,0 +1,482 @@
+{
+  ".claude/settings.json": {
+    "mtime": 1795695832.1731722,
+    "seen": 1795698297.6176877,
+    "ast_hash": "006012ec5a3dce23a1175d927b6408ad",
+    "semantic_hash": ""
+  },
+  ".github/workflows/deploy.yml": {
+    "mtime": 1795695795.951905,
+    "seen": 1795698297.617695,
+    "ast_hash": "b87113ea5638b44af95ca08bf1e6babb",
+    "semantic_hash": ""
+  },
+  "Common/Constants.cs": {
+    "mtime": 1794807212.6784256,
+    "seen": 1795698297.617698,
+    "ast_hash": "d1fe7aa00faa92841f5da4753bf1a7c0",
+    "semantic_hash": ""
+  },
+  "Common/ServiceResult.cs": {
+    "mtime": 1793770056.9547188,
+    "seen": 1795698297.6176996,
+    "ast_hash": "727f84b393c5420b38a2fc4c90dc9a3f",
+    "semantic_hash": ""
+  },
+  "Controllers/AuthController.cs": {
+    "mtime": 1794208168.4018772,
+    "seen": 1795698297.6177013,
+    "ast_hash": "94193f9ea6bc93d6c23aa76a8cbceef1",
+    "semantic_hash": ""
+  },
+  "Controllers/GeminiChatController.cs": {
+    "mtime": 1794979453.59301,
+    "seen": 1795698297.6177027,
+    "ast_hash": "6df1f077232dff2af1e79239ec5f8672",
+    "semantic_hash": ""
+  },
+  "Controllers/StoryChatController.cs": {
+    "mtime": 1795695832.1091502,
+    "seen": 1795698297.6177042,
+    "ast_hash": "8ad9b99f266ed94b2b38dd1a9e08b4ad",
+    "semantic_hash": ""
+  },
+  "Controllers/TicketsController.cs": {
+    "mtime": 1793798338.6165273,
+    "seen": 1795698297.6177056,
+    "ast_hash": "56d5039668a8810c06a6ba555f2cc593",
+    "semantic_hash": ""
+  },
+  "C\uf03aticket-titan-uisrccomponentsPageHeading.tsx": {
+    "mtime": 1795695832.1805894,
+    "seen": 1795698297.617708,
+    "ast_hash": "2a18f6b057accb1a61e18edbaa2713ad",
+    "semantic_hash": ""
+  },
+  "C\uf03aticket-titan-uisrctypesstory.ts": {
+    "mtime": 1795695832.181589,
+    "seen": 1795698297.6177099,
+    "ast_hash": "ff95f0645c62eb3650a5dfade7432794",
+    "semantic_hash": ""
+  },
+  "DTO/GeminiChatMessageDto.cs": {
+    "mtime": 1794215424.4331267,
+    "seen": 1795698297.617711,
+    "ast_hash": "d4d7b74fbdacbed5b8766f5162da8a9f",
+    "semantic_hash": ""
+  },
+  "DTO/GeminiChatRequestDto.cs": {
+    "mtime": 1795678502.51506,
+    "seen": 1795698297.617713,
+    "ast_hash": "7a2d24c07e02db253277ff08c7e7c9a7",
+    "semantic_hash": ""
+  },
+  "DTO/GeminiChatResponseDto.cs": {
+    "mtime": 1794979453.5960107,
+    "seen": 1795698297.617714,
+    "ast_hash": "afd02cad388f7479e937034fe553e69c",
+    "semantic_hash": ""
+  },
+  "DTO/GoogleLoginRequestDto.cs": {
+    "mtime": 1793770056.955719,
+    "seen": 1795698297.6177154,
+    "ast_hash": "cf4e22164f1a500fb8a2bd2d3bd7259d",
+    "semantic_hash": ""
+  },
+  "DTO/GoogleLoginResultDto.cs": {
+    "mtime": 1793779815.688513,
+    "seen": 1795698297.6177168,
+    "ast_hash": "001a6f6cfb3af1dce44dd90711152e8c",
+    "semantic_hash": ""
+  },
+  "DTO/StoryAttachmentDto.cs": {
+    "mtime": 1795695832.181589,
+    "seen": 1795698297.6177182,
+    "ast_hash": "b175fafbfe99ffa34f9a379031a4c6cf",
+    "semantic_hash": ""
+  },
+  "DTO/StoryChatCreateRequestDto.cs": {
+    "mtime": 1794807212.6794262,
+    "seen": 1795698297.6177197,
+    "ast_hash": "2feee4762f1c28b586882e0bf05c073a",
+    "semantic_hash": ""
+  },
+  "DTO/StoryChatMessageDto.cs": {
+    "mtime": 1794979453.5960107,
+    "seen": 1795698297.617721,
+    "ast_hash": "613f2644559973690c9391fd8c7d6642",
+    "semantic_hash": ""
+  },
+  "DTO/StoryChatSessionDto.cs": {
+    "mtime": 1795695832.1101503,
+    "seen": 1795698297.6177223,
+    "ast_hash": "b09a28c95a3aa83c6c145e4346adf6ff",
+    "semantic_hash": ""
+  },
+  "DTO/StorySetup.cs": {
+    "mtime": 1794979453.598011,
+    "seen": 1795698297.6177237,
+    "ast_hash": "84c31e79e1d293ed630148808615bb16",
+    "semantic_hash": ""
+  },
+  "DTO/TicketDtos.cs": {
+    "mtime": 1793798338.6185277,
+    "seen": 1795698297.6177251,
+    "ast_hash": "d66abbc9e054a733b0fbc01299783624",
+    "semantic_hash": ""
+  },
+  "DTO/UploadAttachmentRequestDto.cs": {
+    "mtime": 1795695832.181589,
+    "seen": 1795698297.6177266,
+    "ast_hash": "8f39a5df0f7d5ff4144aa7fd95532bc5",
+    "semantic_hash": ""
+  },
+  "Data/ApplicationDbContext.cs": {
+    "mtime": 1795695832.1101503,
+    "seen": 1795698297.617728,
+    "ast_hash": "deee9340634cf98a8ec18a528f988933",
+    "semantic_hash": ""
+  },
+  "Data/ApplicationUser.cs": {
+    "mtime": 1793779815.6905134,
+    "seen": 1795698297.6177294,
+    "ast_hash": "29a03ccd070e07943c800d6371c68232",
+    "semantic_hash": ""
+  },
+  "Filters/CookieCsrfAuthorizationFilter.cs": {
+    "mtime": 1793951003.043883,
+    "seen": 1795698297.6177309,
+    "ast_hash": "bf2d4823e1c5646cf54cf78ae22e527a",
+    "semantic_hash": ""
+  },
+  "Hub/TicketHub.cs": {
+    "mtime": 1793493147.8842454,
+    "seen": 1795698297.617732,
+    "ast_hash": "2cae7c1fc2181276e891d245a6422981",
+    "semantic_hash": ""
+  },
+  "Interfaces/IAttachmentService.cs": {
+    "mtime": 1795695832.181589,
+    "seen": 1795698297.6177337,
+    "ast_hash": "6bd0f050a305cd96977769049080a265",
+    "semantic_hash": ""
+  },
+  "Interfaces/IAuthService.cs": {
+    "mtime": 1793770056.9577196,
+    "seen": 1795698297.617735,
+    "ast_hash": "e5f42312263b5cd1dc59abcd72b313e8",
+    "semantic_hash": ""
+  },
+  "Interfaces/IGeminiChatService.cs": {
+    "mtime": 1794979453.6000104,
+    "seen": 1795698297.617736,
+    "ast_hash": "78ee4cc41298b2db4ff1f59789b0304f",
+    "semantic_hash": ""
+  },
+  "Interfaces/IStoryChatService.cs": {
+    "mtime": 1795695832.1111507,
+    "seen": 1795698297.6177378,
+    "ast_hash": "88db3166b273b724cfdbe54d94549333",
+    "semantic_hash": ""
+  },
+  "Interfaces/ITicketService.cs": {
+    "mtime": 1793798338.6205325,
+    "seen": 1795698297.617739,
+    "ast_hash": "1aa89815dc1cb54d0707a49a66f06fae",
+    "semantic_hash": ""
+  },
+  "Migrations/20261106083805_InitialSupabaseCreate.Designer.cs": {
+    "mtime": 1793956880.2592747,
+    "seen": 1795698297.6177404,
+    "ast_hash": "67d37d93bbfc6574112d68ac5006bf59",
+    "semantic_hash": ""
+  },
+  "Migrations/20261106083805_InitialSupabaseCreate.cs": {
+    "mtime": 1793956880.260275,
+    "seen": 1795698297.6177416,
+    "ast_hash": "04d9e7dc9219df8ed30b1dc6f9cb4d1f",
+    "semantic_hash": ""
+  },
+  "Migrations/20261116033004_AddStoryChatPersistence.Designer.cs": {
+    "mtime": 1794807212.6814256,
+    "seen": 1795698297.6177428,
+    "ast_hash": "89c45636f54ba7b6a997607f36febc80",
+    "semantic_hash": ""
+  },
+  "Migrations/20261116033004_AddStoryChatPersistence.cs": {
+    "mtime": 1794807212.6824255,
+    "seen": 1795698297.6177444,
+    "ast_hash": "09a96aab755c532abfdb496072072cfc",
+    "semantic_hash": ""
+  },
+  "Migrations/20261118021327_FixStoryChatRoleType.Designer.cs": {
+    "mtime": 1794979453.6010113,
+    "seen": 1795698297.6177456,
+    "ast_hash": "96ffc2d557b95303a387155d802b4e66",
+    "semantic_hash": ""
+  },
+  "Migrations/20261118021327_FixStoryChatRoleType.cs": {
+    "mtime": 1794979453.6010113,
+    "seen": 1795698297.6177466,
+    "ast_hash": "011a788ecc4bb40375c77578c8add320",
+    "semantic_hash": ""
+  },
+  "Migrations/20261125045411_AddStoryChatAttachments.Designer.cs": {
+    "mtime": 1795695832.183093,
+    "seen": 1795698297.6177483,
+    "ast_hash": "5dec0534cf9b0c764e0a4ec72ea97f7f",
+    "semantic_hash": ""
+  },
+  "Migrations/20261125045411_AddStoryChatAttachments.cs": {
+    "mtime": 1795695832.183093,
+    "seen": 1795698297.6177495,
+    "ast_hash": "ef9fd04c64094c24330773aeb8c6ef20",
+    "semantic_hash": ""
+  },
+  "Migrations/ApplicationDbContextModelSnapshot.cs": {
+    "mtime": 1795695832.112151,
+    "seen": 1795698297.617751,
+    "ast_hash": "d7cce949ce18f837793ea53fcd3eb6ad",
+    "semantic_hash": ""
+  },
+  "Models/AttachmentType.cs": {
+    "mtime": 1795695832.1840982,
+    "seen": 1795698297.6177518,
+    "ast_hash": "0832f53a9d4ce07b47185c6d936ea69d",
+    "semantic_hash": ""
+  },
+  "Models/SessionStatus.cs": {
+    "mtime": 1795695832.1840982,
+    "seen": 1795698297.617753,
+    "ast_hash": "f7c4f913ee010ec3e40ead8d53c502d9",
+    "semantic_hash": ""
+  },
+  "Models/StoryChatAttachment.cs": {
+    "mtime": 1795695832.1850975,
+    "seen": 1795698297.6177547,
+    "ast_hash": "968258333691a05a793358e3cb466baf",
+    "semantic_hash": ""
+  },
+  "Models/StoryChatMessage.cs": {
+    "mtime": 1794807212.6824255,
+    "seen": 1795698297.6177561,
+    "ast_hash": "7d4ac3ab6bbc066275646e6877a62873",
+    "semantic_hash": ""
+  },
+  "Models/StoryChatSession.cs": {
+    "mtime": 1795695832.1131508,
+    "seen": 1795698297.6177578,
+    "ast_hash": "2b240eb171e99af1176f7679c844ae1d",
+    "semantic_hash": ""
+  },
+  "Models/Ticket.cs": {
+    "mtime": 1793798338.6225362,
+    "seen": 1795698297.6177588,
+    "ast_hash": "d843a7a8f9fb0bcc3912625442d68598",
+    "semantic_hash": ""
+  },
+  "Program.cs": {
+    "mtime": 1795695832.1141672,
+    "seen": 1795698297.61776,
+    "ast_hash": "803489941b2f8d20295ff977fe4767ef",
+    "semantic_hash": ""
+  },
+  "Properties/launchSettings.json": {
+    "mtime": 1793933820.6078906,
+    "seen": 1795698297.6177614,
+    "ast_hash": "6fa157e737b04501c8aad1a739a3bd63",
+    "semantic_hash": ""
+  },
+  "Properties/serviceDependencies.TicketTitan.json": {
+    "mtime": 1793802153.5645242,
+    "seen": 1795698297.6177626,
+    "ast_hash": "c239a94351f78dcb3f74090a216eb93e",
+    "semantic_hash": ""
+  },
+  "Properties/serviceDependencies.json": {
+    "mtime": 1793802153.5665238,
+    "seen": 1795698297.617764,
+    "ast_hash": "4c974a9142218324621a6ece93cf94e8",
+    "semantic_hash": ""
+  },
+  "Properties/serviceDependencies.local.json": {
+    "mtime": 1793490877.2040524,
+    "seen": 1795698297.6177654,
+    "ast_hash": "fb41cc34384ea89f7b57c8963654275e",
+    "semantic_hash": ""
+  },
+  "Services/AttachmentService.cs": {
+    "mtime": 1795695832.1850975,
+    "seen": 1795698297.6177669,
+    "ast_hash": "43b5400b773789aa7ae0419f8b2821e2",
+    "semantic_hash": ""
+  },
+  "Services/AuthService.cs": {
+    "mtime": 1793779815.692513,
+    "seen": 1795698297.6177683,
+    "ast_hash": "56e6427614c6d9e8761f900ff0ac9f28",
+    "semantic_hash": ""
+  },
+  "Services/GeminiChatService.cs": {
+    "mtime": 1794979453.6030114,
+    "seen": 1795698297.6177695,
+    "ast_hash": "e4e48664e20df7700defd107d700ec9e",
+    "semantic_hash": ""
+  },
+  "Services/StoryChatService.cs": {
+    "mtime": 1795695832.1151674,
+    "seen": 1795698297.617771,
+    "ast_hash": "c1fcd45b8d26182b1a42ba214305cce1",
+    "semantic_hash": ""
+  },
+  "Services/TicketService.cs": {
+    "mtime": 1793798338.6245418,
+    "seen": 1795698297.6177723,
+    "ast_hash": "b1f6abaeed070afb9341e76456f3c314",
+    "semantic_hash": ""
+  },
+  "TicketTitan.csproj": {
+    "mtime": 1794807212.684387,
+    "seen": 1795698297.6177735,
+    "ast_hash": "a28e4f94b3fac2e6753f9e61d245ce48",
+    "semantic_hash": ""
+  },
+  "TicketTitan.slnx": {
+    "mtime": 1793935021.24578,
+    "seen": 1795698297.6177752,
+    "ast_hash": "1d8c88c53f219f4f210279d893b1b668",
+    "semantic_hash": ""
+  },
+  "Validators/CreateTicketDtoValidator.cs": {
+    "mtime": 1793770056.9607193,
+    "seen": 1795698297.6177764,
+    "ast_hash": "146633b692318615f071adb2771abfee",
+    "semantic_hash": ""
+  },
+  "Validators/UpdateTicketStatusDtoValidator.cs": {
+    "mtime": 1793770056.9607193,
+    "seen": 1795698297.6177776,
+    "ast_hash": "7bcb5886c9db728f9000893ec4071717",
+    "semantic_hash": ""
+  },
+  "appsettings.Development.json": {
+    "mtime": 1795695832.1161687,
+    "seen": 1795698297.6177793,
+    "ast_hash": "1f9cf4b47b65f7913e719b65211a6cd9",
+    "semantic_hash": ""
+  },
+  "appsettings.json": {
+    "mtime": 1794215424.4372895,
+    "seen": 1795698297.6177804,
+    "ast_hash": "b9ab165cb6856c8d7f04c194af0da32b",
+    "semantic_hash": ""
+  },
+  "docker-compose.yml": {
+    "mtime": 1795695832.1171675,
+    "seen": 1795698297.617782,
+    "ast_hash": "5c76ffe90f3ff077c09dbe4ac6b48440",
+    "semantic_hash": ""
+  },
+  "e2e/auth-setup.ts": {
+    "mtime": 1795695832.1870975,
+    "seen": 1795698297.617783,
+    "ast_hash": "aa7d6e55c5ca34682bd99ebea7d06aad",
+    "semantic_hash": ""
+  },
+  "e2e/global-setup.ts": {
+    "mtime": 1795695832.1870975,
+    "seen": 1795698297.6177843,
+    "ast_hash": "63c7f7cc6b4ed518fe5e575140d50bdb",
+    "semantic_hash": ""
+  },
+  "e2e/global-teardown.ts": {
+    "mtime": 1795695832.1880977,
+    "seen": 1795698297.6177857,
+    "ast_hash": "84e8dc5d9067d02b54bf9c6bb9b45a5c",
+    "semantic_hash": ""
+  },
+  "e2e/package.json": {
+    "mtime": 1795695832.1890996,
+    "seen": 1795698297.617787,
+    "ast_hash": "8c80c185c137e9807bfb46deef3e309a",
+    "semantic_hash": ""
+  },
+  "e2e/playwright.config.ts": {
+    "mtime": 1795695832.1930978,
+    "seen": 1795698297.6177878,
+    "ast_hash": "7324d6b24a9cf71f69a8bc0b59332830",
+    "semantic_hash": ""
+  },
+  "e2e/story-flow.spec.ts": {
+    "mtime": 1795695832.1945214,
+    "seen": 1795698297.6177893,
+    "ast_hash": "3da99741e0f9716c21a0dd71d32e6728",
+    "semantic_hash": ""
+  },
+  ".claude/CLAUDE.md": {
+    "mtime": 1795695832.172171,
+    "seen": 1795698297.6177905,
+    "ast_hash": "c232166e6492ba1ed955030b16979b05",
+    "semantic_hash": ""
+  },
+  ".github/copilot-instructions.md": {
+    "mtime": 1794807212.677421,
+    "seen": 1795698297.6177917,
+    "ast_hash": "8f99c8ebf66fbee6aaea7b006ccf3ac0",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1795695832.1805894,
+    "seen": 1795698297.617793,
+    "ast_hash": "49bd734213514d6f5db8b8a917f57241",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1794224228.4665852,
+    "seen": 1795698297.617794,
+    "ast_hash": "4b9bbcefde7103884abfb19cca3c5829",
+    "semantic_hash": ""
+  },
+  "e2e/README.md": {
+    "mtime": 1795695832.186097,
+    "seen": 1795698297.6177952,
+    "ast_hash": "8cd0663631380dfbc63332d11a1c7016",
+    "semantic_hash": ""
+  },
+  "e2e/playwright-report/index.html": {
+    "mtime": 1795695832.1920972,
+    "seen": 1795698297.6177967,
+    "ast_hash": "212c6b3cb68d50f0264e05ed22d88cb9",
+    "semantic_hash": ""
+  },
+  "e2e/test-assets/setting2.pdf": {
+    "mtime": 1795695832.1975217,
+    "seen": 1795698297.6177979,
+    "ast_hash": "899695b26c6e4960378bee20f39fdf31",
+    "semantic_hash": ""
+  },
+  "e2e/test-assets/character1.png": {
+    "mtime": 1795695832.1955218,
+    "seen": 1795698297.6177993,
+    "ast_hash": "f829b914fc47cfc9c0747c119c27cf1b",
+    "semantic_hash": ""
+  },
+  "e2e/test-assets/character2.jpg": {
+    "mtime": 1795695832.1965227,
+    "seen": 1795698297.6178002,
+    "ast_hash": "ba3142c69611927c07bd2dea01fdcbe8",
+    "semantic_hash": ""
+  },
+  "e2e/test-assets/setting1.png": {
+    "mtime": 1795695832.1965227,
+    "seen": 1795698297.6178014,
+    "ast_hash": "f829b914fc47cfc9c0747c119c27cf1b",
+    "semantic_hash": ""
+  },
+  "e2e/package-lock.json": {
+    "mtime": 1795695832.1880977,
+    "seen": 1795698297.6178029,
+    "ast_hash": "703737d2a9233adf017fd2d13b2d5847",
+    "semantic_hash": ""
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "ticket-titan-e2e",
+  "version": "1.0.0",
+  "description": "End-to-end tests for TicketTitan",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "install:browsers": "playwright install chromium",
+    "install:all": "playwright install"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.0",
+    "@types/node": "^20.14.0"
+  }
+}
