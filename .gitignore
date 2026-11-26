@@ -47,6 +47,9 @@ Generated\ Files/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+# Playwright auth state (contains cookies, localStorage, etc.)
+e2e/playwright/.auth/
+
 # NUnit
 *.VisualState.xml
 TestResult.xml

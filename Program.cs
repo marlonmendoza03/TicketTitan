@@ -49,6 +49,11 @@ builder.Services.AddHttpClient<IGeminiChatService, GeminiChatService>(client =>
     client.Timeout = TimeSpan.FromMinutes(3);
 });
 
+builder.Services.AddHttpClient<IAttachmentService, AttachmentService>(client =>
+{
+    client.Timeout = TimeSpan.FromMinutes(2);
+});
+
 builder.Services.AddRequestTimeouts(options =>
 {
     options.DefaultPolicy = new RequestTimeoutPolicy
@@ -88,6 +93,11 @@ builder.Services.AddAntiforgery(options =>
         ? SameSiteMode.Lax
         : SameSiteMode.None;
     options.Cookie.Path = "/";
+    // Allow cross-port on localhost for development
+    if (builder.Environment.IsDevelopment())
+    {
+        options.Cookie.Domain = null; // Explicitly null for localhost
+    }
 });
 
 builder.Services.AddScoped<CookieCsrfAuthorizationFilter>();
@@ -107,6 +117,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IStoryChatService, StoryChatService>();
+builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 builder.Services.AddSignalR();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

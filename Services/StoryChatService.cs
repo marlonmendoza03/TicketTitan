@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TicketTitan.Common;
 using TicketTitan.Data;
 using TicketTitan.DTO;
@@ -12,11 +11,13 @@ namespace TicketTitan.Services
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IGeminiChatService _geminiChatService;
+        private readonly IAttachmentService _attachmentService;
 
-        public StoryChatService(ApplicationDbContext dbContext, IGeminiChatService geminiChatService)
+        public StoryChatService(ApplicationDbContext dbContext, IGeminiChatService geminiChatService, IAttachmentService attachmentService)
         {
             _dbContext = dbContext;
             _geminiChatService = geminiChatService;
+            _attachmentService = attachmentService;
         }
 
         public async Task<ServiceResult<StoryChatSessionDto>> CreateSessionAsync(string userId, string? title)
@@ -36,7 +37,9 @@ namespace TicketTitan.Services
                 Title = session.Title,
                 CreatedAt = session.CreatedAt,
                 UpdatedAt = session.UpdatedAt,
-                Messages = new List<StoryChatMessageDto>()
+                Status = session.Status,
+                Messages = new List<StoryChatMessageDto>(),
+                Attachments = new List<StoryAttachmentDto>()
             };
 
             return ServiceResult<StoryChatSessionDto>.Success(reply);
@@ -54,6 +57,7 @@ namespace TicketTitan.Services
                     Title = x.Title,
                     CreatedAt = x.CreatedAt,
                     UpdatedAt = x.UpdatedAt,
+                    Status = x.Status,
                     MessageCount = x.Messages.Count
                 })
                 .ToListAsync();
@@ -63,6 +67,7 @@ namespace TicketTitan.Services
         {
             var session = await _dbContext.StoryChatSessions
                 .Include(x => x.Messages)
+                .Include(x => x.Attachments)
                 .FirstOrDefaultAsync(x => x.Id == sessionId && x.UserId == userId);
 
             if (session is null)
@@ -74,7 +79,20 @@ namespace TicketTitan.Services
                 Title = session.Title,
                 CreatedAt = session.CreatedAt,
                 UpdatedAt = session.UpdatedAt,
+                Status = session.Status,
                 MessageCount = session.Messages.Count,
+                Attachments = session.Attachments
+                    .OrderBy(x => x.UploadedAt)
+                    .Select(x => new StoryAttachmentDto
+                    {
+                        Id = x.Id,
+                        FileName = x.FileName,
+                        Type = x.Type,
+                        DownloadUrl = x.DownloadUrl,
+                        FileSize = x.FileSize,
+                        ContentType = x.ContentType,
+                        UploadedAt = x.UploadedAt
+                    }).ToList(),
                 Messages = session.Messages
                     .OrderBy(x => x.CreatedAt)
                     .Select(x => new StoryChatMessageDto
@@ -135,6 +153,7 @@ namespace TicketTitan.Services
                 Title = session.Title,
                 CreatedAt = session.CreatedAt,
                 UpdatedAt = session.UpdatedAt,
+                Status = session.Status,
                 MessageCount = session.Messages.Count + 2,
                 Messages = session.Messages.OrderBy(x => x.CreatedAt).Select(x => new StoryChatMessageDto
                 {
@@ -205,6 +224,7 @@ namespace TicketTitan.Services
                 Title = session.Title,
                 CreatedAt = session.CreatedAt,
                 UpdatedAt = session.UpdatedAt,
+                Status = session.Status,
                 MessageCount = session.Messages.Count,
                 Messages = session.Messages.OrderBy(x => x.CreatedAt).Select(x => new StoryChatMessageDto
                 {
@@ -214,6 +234,78 @@ namespace TicketTitan.Services
             };
 
             return ServiceResult<StoryChatSessionDto>.Success(response);
+        }
+
+        public async Task<ServiceResult<StoryChatSessionDto>> ApproveSessionAsync(Guid sessionId, string userId)
+        {
+            var session = await _dbContext.StoryChatSessions
+                .Include(x => x.Attachments)
+                .FirstOrDefaultAsync(x => x.Id == sessionId && x.UserId == userId);
+
+            if (session is null)
+                return ServiceResult<StoryChatSessionDto>.Failure("Session not found");
+
+            session.Status = SessionStatus.Approved;
+            session.UpdatedAt = DateTime.UtcNow;
+
+            await _dbContext.SaveChangesAsync();
+
+            var response = new StoryChatSessionDto
+            {
+                Id = session.Id,
+                Title = session.Title,
+                CreatedAt = session.CreatedAt,
+                UpdatedAt = session.UpdatedAt,
+                Status = session.Status,
+                MessageCount = session.Messages.Count,
+                Attachments = session.Attachments
+                    .OrderBy(x => x.UploadedAt)
+                    .Select(x => new StoryAttachmentDto
+                    {
+                        Id = x.Id,
+                        FileName = x.FileName,
+                        Type = x.Type,
+                        DownloadUrl = x.DownloadUrl,
+                        FileSize = x.FileSize,
+                        ContentType = x.ContentType,
+                        UploadedAt = x.UploadedAt
+                    }).ToList(),
+                Messages = session.Messages.OrderBy(x => x.CreatedAt).Select(x => new StoryChatMessageDto
+                {
+                    Role = x.Role,
+                    Content = x.Content
+                }).ToList()
+            };
+
+            return ServiceResult<StoryChatSessionDto>.Success(response);
+        }
+
+        public async Task<ServiceResult<bool>> DeleteSessionAsync(Guid sessionId, string userId)
+        {
+            var session = await _dbContext.StoryChatSessions
+                .Include(x => x.Attachments)
+                .FirstOrDefaultAsync(x => x.Id == sessionId && x.UserId == userId);
+
+            if (session is null)
+                return ServiceResult<bool>.Failure("Session not found");
+
+            // Delete all attachments from Supabase Storage first
+            foreach (var attachment in session.Attachments)
+            {
+                var deleteResult = await _attachmentService.DeleteAttachmentAsync(sessionId, userId, attachment.Id);
+                if (!deleteResult.IsSuccess)
+                {
+                    // Log the failure but continue with other attachments
+                    // In production, you might want to use a background job to retry
+                    System.Diagnostics.Debug.WriteLine($"Failed to delete attachment {attachment.Id} from Supabase: {deleteResult.ErrorMessage}");
+                }
+            }
+
+            // Delete the session (cascades to messages and attachments in DB)
+            _dbContext.StoryChatSessions.Remove(session);
+            await _dbContext.SaveChangesAsync();
+
+            return ServiceResult<bool>.Success(true);
         }
     }
 }
