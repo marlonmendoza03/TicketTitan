@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TicketTitan.DTO;
 using TicketTitan.Interfaces;
+using TicketTitan.Models;
 
 namespace TicketTitan.Controllers
 {
@@ -12,9 +13,11 @@ namespace TicketTitan.Controllers
     public class StoryChatController : ControllerBase
     {
         private readonly IStoryChatService _storyChatService;
-        public StoryChatController(IStoryChatService storyChatService)
+        private readonly IAttachmentService _attachmentService;
+        public StoryChatController(IStoryChatService storyChatService, IAttachmentService attachmentService)
         {
             _storyChatService = storyChatService;
+            _attachmentService = attachmentService;
         }
 
         [HttpPost("sessions")]
@@ -94,7 +97,96 @@ namespace TicketTitan.Controllers
                 return BadRequest(initialMessage.ErrorMessage);
 
             return Ok(initialMessage.Value);
-        }   
+        }
 
+        [HttpPost("sessions/{sessionId}/approve")]
+        public async Task<ActionResult<StoryChatSessionDto>> ApproveSession(Guid sessionId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized();
+
+            var result = await _storyChatService.ApproveSessionAsync(sessionId, userId);
+            if (!result.IsSuccess)
+                return BadRequest(result.ErrorMessage);
+
+            if (result.Value is null)
+                return NotFound();
+
+            return Ok(result.Value);
+        }
+
+        [HttpPost("sessions/{sessionId}/attachments")]
+        [RequestFormLimits(MultipartBodyLengthLimit = 10 * 1024 * 1024)]
+        public async Task<ActionResult<StoryAttachmentDto>> UploadAttachment(Guid sessionId, [FromForm] IFormFile file, [FromForm] AttachmentType type)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized();
+
+            if (file is null || file.Length == 0)
+                return BadRequest("File is required.");
+
+            var result = await _attachmentService.UploadAttachmentAsync(sessionId, userId, file.FileName, file.OpenReadStream(), file.Length, type, file.ContentType);
+            if (!result.IsSuccess || result.Value is null)
+                return BadRequest(result.ErrorMessage);
+
+            // Return the attachment directly from the service - no need to re-query (fixes concurrency issue #5)
+            var attachment = result.Value;
+            var attachmentDto = new StoryAttachmentDto
+            {
+                Id = attachment.Id,
+                FileName = attachment.FileName,
+                Type = attachment.Type,
+                DownloadUrl = attachment.DownloadUrl,
+                FileSize = attachment.FileSize,
+                ContentType = attachment.ContentType,
+                UploadedAt = attachment.UploadedAt
+            };
+
+            return Ok(attachmentDto);
+        }
+
+        [HttpGet("sessions/{sessionId}/attachments")]
+        public async Task<ActionResult<List<StoryAttachmentDto>>> GetAttachments(Guid sessionId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized();
+
+            var session = await _storyChatService.GetSessionAsync(sessionId, userId);
+            if (!session.IsSuccess || session.Value is null)
+                return BadRequest(session.ErrorMessage);
+
+            return Ok(session.Value.Attachments);
+        }
+
+        [HttpDelete("sessions/{sessionId}/attachments/{attachmentId}")]
+        public async Task<IActionResult> DeleteAttachment(Guid sessionId, Guid attachmentId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized();
+
+            var result = await _attachmentService.DeleteAttachmentAsync(sessionId, userId, attachmentId);
+            if (!result.IsSuccess)
+                return BadRequest(result.ErrorMessage);
+
+            return NoContent();
+        }
+
+        [HttpDelete("sessions/{sessionId}")]
+        public async Task<IActionResult> DeleteSession(Guid sessionId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized();
+
+            var result = await _storyChatService.DeleteSessionAsync(sessionId, userId);
+            if (!result.IsSuccess)
+                return BadRequest(result.ErrorMessage);
+
+            return NoContent();
+        }
     }
 }

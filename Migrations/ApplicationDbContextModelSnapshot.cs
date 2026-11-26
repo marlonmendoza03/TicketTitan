@@ -218,6 +218,51 @@ namespace TicketTitan.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("TicketTitan.Models.StoryChatAttachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ContentType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DownloadUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("StoragePath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SessionId");
+
+                    b.ToTable("StoryChatAttachments");
+                });
+
             modelBuilder.Entity("TicketTitan.Models.StoryChatMessage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -253,6 +298,9 @@ namespace TicketTitan.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -372,6 +420,17 @@ namespace TicketTitan.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TicketTitan.Models.StoryChatAttachment", b =>
+                {
+                    b.HasOne("TicketTitan.Models.StoryChatSession", "Session")
+                        .WithMany("Attachments")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Session");
+                });
+
             modelBuilder.Entity("TicketTitan.Models.StoryChatMessage", b =>
                 {
                     b.HasOne("TicketTitan.Models.StoryChatSession", "Session")
@@ -402,6 +461,8 @@ namespace TicketTitan.Migrations
 
             modelBuilder.Entity("TicketTitan.Models.StoryChatSession", b =>
                 {
+                    b.Navigation("Attachments");
+
                     b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618

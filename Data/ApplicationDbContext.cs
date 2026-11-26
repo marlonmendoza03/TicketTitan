@@ -14,6 +14,7 @@ namespace TicketTitan.Data
         public DbSet<Ticket> Tickets => Set<Ticket>();
         public DbSet<StoryChatSession> StoryChatSessions => Set<StoryChatSession>();
         public DbSet<StoryChatMessage> StoryChatMessages => Set<StoryChatMessage>();
+        public DbSet<StoryChatAttachment> StoryChatAttachments => Set<StoryChatAttachment>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +30,34 @@ namespace TicketTitan.Data
 
                 entity.Property(x => x.UserId)
                 .IsRequired();
+
+                entity.Property(x => x.Status)
+                .HasConversion<int>()
+                .IsRequired();
+            });
+
+            modelBuilder.Entity<StoryChatAttachment>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.Type)
+                .HasConversion<int>()
+                .IsRequired();
+
+                entity.Property(x => x.FileName)
+                .HasMaxLength(256)
+                .IsRequired();
+
+                entity.Property(x => x.StoragePath)
+                .IsRequired();
+
+                entity.Property(x => x.DownloadUrl)
+                .IsRequired();
+
+                entity.HasOne(x => x.Session)
+                .WithMany(x => x.Attachments)
+                .HasForeignKey(x => x.SessionId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<StoryChatMessage>(entity =>
